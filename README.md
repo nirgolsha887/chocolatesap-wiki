@@ -1,5 +1,7 @@
-# ChocolateSMP Wiki
+# ChocolateSMP
 
-Player guide for the ChocolateSMP Minecraft server (`chocolatesap.minekeep.gg`).
+Website for the ChocolateSMP Minecraft server (`chocolatesap.minekeep.gg`).
 
-Live page: https://nirgolsha887.github.io/chocolatesap-wiki/
+- Home: https://nirgolsha887.github.io/chocolatesap-wiki/
+- Wiki: https://nirgolsha887.github.io/chocolatesap-wiki/wiki/
+- Store: https://nirgolsha887.github.io/chocolatesap-wiki/store/
