@@ -1,4 +1,4 @@
-// ChocolateSAP store settings.
+// ChocolateSMP store settings.
 //
 // token: your Tebex PUBLIC token (creator.tebex.io > Developers > API Keys > "Public Token",
 //        it starts with 4 letters and a dash, e.g. "abcd-1234..."). It is safe to put here.
