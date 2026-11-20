@@ -54,7 +54,9 @@
   .band h1 { font-family: var(--display); font-weight: 400; font-size: clamp(42px, 7vw, 72px); line-height: 1; margin: 0; letter-spacing: .5px; text-wrap: balance; }
   .band h1 .sap { color: var(--wrapper); }
   .band p { margin: 10px 0 18px; font-size: 18px; font-weight: 600; max-width: 52ch; }
-  .ipbox { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .ipbox { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; }
+  .iplabel { font: 800 12px var(--body); letter-spacing: .1em; text-transform: uppercase; min-width: 64px; }
+  .port { font: 800 14px var(--body); }
   .ip { font-family: var(--mono); font-size: 17px; background: var(--gold); color: #1C0E12; border: 3px solid #1C0E12; border-radius: 999px; padding: 8px 18px; user-select: all; }
   button.copy { font: 800 14px var(--body); background: #1C0E12; color: #FFF3D6; border: 0; border-radius: 999px; padding: 11px 18px; cursor: pointer; }
   button.copy:hover { background: var(--wrapper); }
@@ -201,8 +203,15 @@
       <h1>Chocolate<span class="sap">SAP</span></h1>
       <p>Survival, 1v1 duels and a chocolate economy. Everything you need to know to play.</p>
       <div class="ipbox">
+        <span class="iplabel">Java</span>
         <span class="ip" id="ip">chocolatesap.minekeep.gg</span>
-        <button class="copy" id="copyIp" type="button">Copy IP</button>
+        <button class="copy" id="copyIp" type="button" data-copy="ip">Copy IP</button>
+      </div>
+      <div class="ipbox">
+        <span class="iplabel">Bedrock</span>
+        <span class="ip" id="ipb">chocolatesap.bedrock.minekeep.gg</span>
+        <button class="copy" type="button" data-copy="ipb">Copy IP</button>
+        <span class="port">Port 19132</span>
       </div>
       <div class="tags"><span class="tag">Java</span><span class="tag">Bedrock</span><span class="tag">Survival</span><span class="tag">Duels</span></div>
     </div>
@@ -236,7 +245,12 @@
         <li>Join. The server runs the latest version, and older versions can connect too.</li>
       </ol>
       <h3>Bedrock Edition</h3>
-      <p>Phone, console and Windows 10/11 players can join the same worlds. Go to <b>Servers</b>, then <b>Add Server</b>, and use the same address. Bedrock names show up with a dot in front, like <code>.Steve</code>.</p>
+      <ol class="steps">
+        <li>Phone, console and Windows players can join the same worlds as Java.</li>
+        <li>Go to <b>Play</b>, then <b>Servers</b>, then <b>Add Server</b>.</li>
+        <li>Server address: <code>chocolatesap.bedrock.minekeep.gg</code>, port: <code>19132</code>.</li>
+        <li>Bedrock names show up with a dot in front, like <code>.Steve</code>.</li>
+      </ol>
       <h3>Voice chat</h3>
       <p>The server has proximity voice chat. On Java, install the <b>Simple Voice Chat</b> mod to talk and hear the players near you.</p>
     </section>
@@ -360,17 +374,19 @@
 <footer class="wrap">ChocolateSAP · chocolatesap.minekeep.gg</footer>
 
 <script>
-  document.getElementById('copyIp').addEventListener('click', function () {
-    var btn = this, ip = document.getElementById('ip');
-    function selectIt() {
-      var r = document.createRange(); r.selectNodeContents(ip);
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-      btn.textContent = 'Selected: press Ctrl+C';
-    }
-    try {
-      navigator.clipboard.writeText(ip.textContent).then(function () { btn.textContent = 'Copied!'; }, selectIt);
-    } catch (e) { selectIt(); }
-    setTimeout(function () { btn.textContent = 'Copy IP'; }, 2500);
+  document.querySelectorAll('button.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var ip = document.getElementById(btn.getAttribute('data-copy'));
+      function selectIt() {
+        var r = document.createRange(); r.selectNodeContents(ip);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Selected: press Ctrl+C';
+      }
+      try {
+        navigator.clipboard.writeText(ip.textContent).then(function () { btn.textContent = 'Copied!'; }, selectIt);
+      } catch (e) { selectIt(); }
+      setTimeout(function () { btn.textContent = 'Copy IP'; }, 2500);
+    });
   });
 </script>
 

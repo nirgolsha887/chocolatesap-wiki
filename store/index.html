@@ -49,10 +49,27 @@
   nav.top a:hover { background: var(--outline); color: #FFF3D6; }
 
   main { padding-block: 32px 64px; display: grid; gap: 28px; }
-  .who { background: var(--surface); border: 3px solid var(--line); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; max-width: 560px; }
-  .who label { font-weight: 800; }
-  .who input { font: 600 18px var(--body); padding: 10px 14px; border-radius: 10px; border: 3px solid var(--outline); background: var(--bg); color: var(--ink); width: 100%; }
-  .who small { color: var(--muted); }
+  .top-row { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 18px; align-items: start; }
+  .who, .join { background: var(--surface); border: 3px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+  .who h2, .join h2 { font-family: var(--display); font-weight: 400; font-size: 24px; margin: 0 0 12px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .edition { display: inline-flex; border: 3px solid var(--outline); border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+  .ed { font: 400 18px var(--display); padding: 8px 20px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+  .ed.on { background: var(--choc); color: #FFF3D6; }
+  .find { display: flex; gap: 10px; }
+  .find input { flex: 1; min-width: 0; font: 600 18px var(--body); padding: 10px 14px; border-radius: 10px; border: 3px solid var(--outline); background: var(--bg); color: var(--ink); }
+  .find-btn { background: var(--gold); color: #1C0E12; white-space: nowrap; }
+  .found, .me { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px 14px; align-items: center; margin-top: 14px; }
+  .found img, .me img { width: 72px; height: 72px; border-radius: 12px; border: 3px solid var(--outline); background: var(--bg); image-rendering: pixelated; object-fit: cover; }
+  .found .choices { grid-column: 1 / -1; }
+  .found-name { font-family: var(--display); font-size: 26px; line-height: 1.1; overflow-wrap: anywhere; }
+  .found-sub { color: var(--muted); font-size: 14px; }
+  .me .out { grid-column: 1 / -1; justify-self: start; background: transparent; color: var(--ink); font-size: 16px; padding: 6px 12px; }
+  .addr { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-block: 6px; }
+  .addr code { font: 600 15px ui-monospace, Consolas, monospace; background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 4px 8px; overflow-wrap: anywhere; }
+  .tag { font: 800 12px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--choc); min-width: 64px; }
+  .copy { font: 800 13px var(--body); border: 2px solid var(--outline); border-radius: 999px; padding: 4px 12px; background: var(--gold); color: #1C0E12; cursor: pointer; }
+  @media (max-width: 860px) { .top-row { grid-template-columns: minmax(0, 1fr); } }
 
   .ranks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
   .rank { background: var(--surface); border: 4px solid var(--outline); border-radius: 18px; padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 6px 0 var(--outline); }
@@ -103,11 +120,52 @@
 </header>
 
 <main class="wrap">
-  <section class="who">
-    <label for="username">Your Minecraft name</label>
-    <input id="username" autocomplete="nickname" maxlength="17" placeholder="e.g. Steve" spellcheck="false">
-    <small>The rank goes to this player. Bedrock players: put the dot first, like <b>.Steve</b>.</small>
-  </section>
+  <div class="top-row">
+    <!-- who is buying: pick the edition, find the player, confirm -->
+    <section class="who" id="who" aria-labelledby="whoTitle">
+      <div id="signedOut">
+        <h2 id="whoTitle">Sign in with your Minecraft name</h2>
+        <div class="edition" role="radiogroup" aria-label="Edition">
+          <button type="button" class="ed on" data-ed="java" role="radio" aria-checked="true">Java</button>
+          <button type="button" class="ed" data-ed="bedrock" role="radio" aria-checked="false">Bedrock</button>
+        </div>
+        <form class="find" id="findForm">
+          <label for="username" class="sr" id="nameLabel">Java username</label>
+          <input id="username" autocomplete="nickname" maxlength="16" placeholder="Java username, e.g. Steve" spellcheck="false">
+          <button class="btn find-btn" type="submit">Find me</button>
+        </form>
+        <div class="found" id="found" hidden>
+          <img id="foundHead" alt="">
+          <div>
+            <div class="found-name" id="foundName"></div>
+            <div class="found-sub" id="foundSub"></div>
+          </div>
+          <div class="choices">
+            <button class="btn ok" id="itsMe" type="button">✔ That's me</button>
+            <button class="btn no" id="notMe" type="button">✖ Not me</button>
+          </div>
+        </div>
+      </div>
+      <div id="signedIn" hidden>
+        <div class="me">
+          <img id="meHead" alt="">
+          <div>
+            <div class="found-sub">Signed in as</div>
+            <div class="found-name" id="meName"></div>
+            <div class="found-sub" id="meEd"></div>
+          </div>
+          <button class="btn out" id="signOut" type="button">Sign out</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="join" aria-labelledby="joinTitle">
+      <h2 id="joinTitle">Join the server</h2>
+      <div class="addr"><span class="tag">Java</span><code id="ipJava">chocolatesap.minekeep.gg</code><button class="copy" type="button" data-copy="ipJava">Copy</button></div>
+      <div class="addr"><span class="tag">Bedrock</span><code id="ipBedrock">chocolatesap.bedrock.minekeep.gg</code><button class="copy" type="button" data-copy="ipBedrock">Copy</button></div>
+      <div class="addr"><span class="tag">Port</span><code id="ipPort">19132</code><span class="found-sub">Bedrock only</span></div>
+    </section>
+  </div>
 
   <section class="ranks" id="ranks" aria-label="Ranks"></section>
   <p class="status" id="status" role="status"></p>
@@ -186,11 +244,60 @@
     }).catch(function () { say("Couldn't load prices from the store right now. Try again in a minute.", true); });
   }
 
-  function validName(n) { return /^\.?[A-Za-z0-9_]{3,16}$/.test(n); }
+  // ---------------------------------------------------------------- sign in (find the real player)
+  var edition = "java", candidate = null, me = null;
+  function loadMe() { try { me = JSON.parse(localStorage.getItem("chocoMe") || "null"); } catch (e) { me = null; } }
+  function saveMe() { try { if (me) { localStorage.setItem("chocoMe", JSON.stringify(me)); } else { localStorage.removeItem("chocoMe"); } } catch (e) { /* private mode */ } }
+  // the name the server uses: Bedrock players get a dot in front, spaces become _
+  function serverName(p) { return p.edition === "bedrock" ? "." + p.name.replace(/ /g, "_") : p.name; }
+
+  function showMe() {
+    $("signedIn").hidden = !me;
+    $("signedOut").hidden = !!me;
+    if (me) {
+      $("meHead").src = me.head;
+      $("meName").textContent = serverName(me);
+      $("meEd").textContent = me.edition === "bedrock" ? "Bedrock (Xbox: " + me.name + ")" : "Java Edition";
+    }
+  }
+
+  function setEdition(ed) {
+    edition = ed;
+    document.querySelectorAll(".ed").forEach(function (b) { var on = b.dataset.ed === ed; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); });
+    $("username").placeholder = ed === "java" ? "Java username, e.g. Steve" : "Xbox gamertag, e.g. Steve123";
+    $("nameLabel").textContent = ed === "java" ? "Java username" : "Xbox gamertag";
+    $("username").maxLength = ed === "java" ? 16 : 20;
+    $("found").hidden = true;
+    candidate = null;
+  }
+
+  function find(ev) {
+    ev.preventDefault();
+    var n = $("username").value.trim();
+    if (edition === "java" && !/^[A-Za-z0-9_]{3,16}$/.test(n)) { say("A Java name is 3-16 letters, numbers or _.", true); return; }
+    if (edition === "bedrock" && !/^[A-Za-z0-9 ]{1,20}$/.test(n.replace(/^\./, ""))) { say("Type your Xbox gamertag.", true); return; }
+    n = n.replace(/^\./, "");
+    say("Looking for " + n + "…");
+    fetch("https://playerdb.co/api/player/" + (edition === "java" ? "minecraft/" : "xbox/") + encodeURIComponent(n))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var p = j && j.success !== false && j.data && j.data.player;
+        if (!p) { say("No " + (edition === "java" ? "Java player" : "Xbox account") + " called " + n + ". Check the spelling and the edition.", true); $("found").hidden = true; return; }
+        candidate = edition === "java"
+          ? { edition: "java", name: p.username, id: p.raw_id || p.id, head: p.avatar || ("https://crafthead.net/avatar/" + (p.raw_id || p.id)) }
+          : { edition: "bedrock", name: p.username, id: p.id, head: p.avatar || "" };
+        $("foundHead").src = candidate.head;
+        $("foundName").textContent = serverName(candidate);
+        $("foundSub").textContent = edition === "java" ? "Java Edition player" : "Bedrock player (Xbox: " + p.username + ")";
+        $("found").hidden = false;
+        say("");
+      })
+      .catch(function () { say("Couldn't check the name right now. Try again in a minute.", true); });
+  }
 
   function open(i) {
-    var name = $("username").value.trim();
-    if (!validName(name)) { say("Type your Minecraft name first (3-16 letters, numbers or _).", true); $("username").focus(); return; }
+    if (!me) { say("Sign in with your Minecraft name first.", true); $("username").focus(); document.getElementById("who").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    var name = serverName(me);
     chosen = ranks[i];
     say("");
     $("sheetTitle").textContent = "Buy " + chosen.name + "?";
@@ -204,7 +311,7 @@
   function confirm() {
     if (!chosen) { return; }
     if (!S.token || !chosen.ident) { close(); say("The store isn't open yet. Check back soon!", true); return; }
-    var name = $("username").value.trim();
+    var name = serverName(me);
     $("confirm").disabled = true;
     say("Getting your checkout ready…");
     api("/baskets", { method: "POST", body: JSON.stringify({ complete_url: HERE + "?thanks=1", cancel_url: HERE, complete_auto_redirect: true, username: name }) })
@@ -243,8 +350,21 @@
     say("Thank you! Your rank will appear in-game within a few minutes. 🍫");
   }
 
-  try { var last = localStorage.getItem("chocoName"); if (last) { $("username").value = last; } } catch (e) { /* ignore */ }
-  $("username").addEventListener("change", function () { try { localStorage.setItem("chocoName", this.value.trim()); } catch (e) { /* ignore */ } });
+  loadMe();
+  showMe();
+  document.querySelectorAll(".ed").forEach(function (b) { b.addEventListener("click", function () { setEdition(b.dataset.ed); }); });
+  $("findForm").addEventListener("submit", find);
+  $("itsMe").addEventListener("click", function () { if (candidate) { me = candidate; saveMe(); showMe(); say("Signed in as " + serverName(me) + ". Pick a rank!"); } });
+  $("notMe").addEventListener("click", function () { $("found").hidden = true; candidate = null; $("username").select(); });
+  $("signOut").addEventListener("click", function () { me = null; saveMe(); showMe(); setEdition(edition); });
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var el = $(b.dataset.copy), text = el.textContent;
+      var pick = function () { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Ctrl+C"; };
+      try { navigator.clipboard.writeText(text).then(function () { b.textContent = "Copied!"; }, pick); } catch (e) { pick(); }
+      setTimeout(function () { b.textContent = "Copy"; }, 2000);
+    });
+  });
   $("ranks").addEventListener("click", function (e) { var b = e.target.closest(".buy"); if (b) { open(+b.dataset.i); } });
   $("confirm").addEventListener("click", confirm);
   $("cancel").addEventListener("click", close);
