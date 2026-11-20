@@ -10,13 +10,13 @@
 window.STORE = {
   token: "",
   ranks: [
-    { match: "vip", name: "VIP", colors: ["#E0A21B"], icon: "cookie", price: "€4.99",
+    { match: "vip", name: "VIP", colors: ["#E0A21B"], icon: "cookie", price: "€7.90",
       perks: ["[VIP] tag in chat and TAB", "Gold name", "15 items on Quick Buy (instead of 5)"] },
-    { match: "vip+", name: "VIP+", colors: ["#55FFFF", "#00AAAA"], icon: "bar", price: "€9.99",
+    { match: "vip+", name: "VIP+", colors: ["#55FFFF", "#00AAAA"], icon: "bar", price: "€16.99",
       perks: ["[VIP+] tag", "Name in two blues, letter by letter", "25 items on Quick Buy", "Everything from VIP"] },
-    { match: "choco mvp", name: "Choco MVP", colors: ["#FFAA00", "#FFFF55"], icon: "cake", price: "€19.99",
+    { match: "choco mvp", name: "Choco MVP", colors: ["#FFAA00", "#FFFF55"], icon: "cake", price: "€24.99",
       perks: ["[Choco MVP] tag", "Name in gold and yellow, letter by letter", "40 items on Quick Buy", "Everything from VIP+"] },
     { match: "cocoa king", name: "Cocoa King", colors: ["#AA0000", "#FFAA00"], icon: "crown", price: "€29.99",
-      perks: ["[Cocoa King] tag", "Name in red and gold, letter by letter", "60 items on Quick Buy", "Everything from Choco MVP"] }
+      perks: ["[Cocoa King] tag", "Name in red and gold, letter by letter", "60 items on Quick Buy", "Chocolate Blade and Chocolate Pick (soulbound)", "Everything from Choco MVP"] }
   ]
 };
